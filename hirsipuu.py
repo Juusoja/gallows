@@ -1,4 +1,4 @@
-from printer import tulosta_naytto
+from printer import tulosta_naytto, tyhjenna_naytto
 
 def load():
 	from parser import arvo_sana
@@ -9,10 +9,9 @@ def load():
 def main():
 	sana = load()
 	arvatut = ''
-	vaarat = 0
 	voitto = False
 	tappio = False
-	tulosta_naytto(sana, arvatut, vaarat)
+	tulosta_naytto(sana, arvatut)
 
 	while not voitto and not tappio:
 		arvaus = input("Arvaa kirjain: ")
@@ -20,10 +19,12 @@ def main():
 			tyhjenna_naytto()
 			print("Anna yksi kirjain!")
 			continue
+		if arvaus in arvatut:
+			print("Olet jo arvannut tämän kirjaimen!")
+			continue
 		arvatut += arvaus.lower()
-		if arvaus not in sana or arvaus not in arvatut:
-			vaarat = vaarat + 1
-			if vaarat > 6:
+		if arvaus not in sana:
+			if len([kirjain for kirjain in arvatut if kirjain not in sana]) > 6:
 				tappio = True
 		else:
 			jatkuu = False
@@ -32,7 +33,7 @@ def main():
 					jatkuu = True
 			if not jatkuu:
 				voitto = True
-		tulosta_naytto(sana, arvatut, vaarat)
+		tulosta_naytto(sana, arvatut)
 	print(f"Pelin tulos: {'Voitto' if voitto else 'Tappio'}")
 	print(f"Oikea sana oli: {sana}")
 
